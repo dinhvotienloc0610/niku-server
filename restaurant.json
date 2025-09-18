@@ -1,0 +1,39 @@
+{
+  "name": "NIKU • STYLE Demo",
+  "contact": {
+    "email": "reservations@example.com",
+    "phone": "(555) 555-0199"
+  },
+  "policies": {
+    "buffet_time_limit_minutes": 120,
+    "large_party_deposit_required": true,
+    "allergy_note": "Please inform us of allergies when booking."
+  },
+  "locations": [
+    {
+      "city": "Downtown LA",
+      "address": ["900 Wilshire Blvd Ste 212", "Los Angeles, CA 90017"],
+      "hours": {
+        "Mon-Thu": "5pm–11pm",
+        "Fri": "5pm–12am",
+        "Sat": "12pm–3pm, 4pm–12am",
+        "Sun": "12pm–3pm, 4pm–11pm"
+      }
+    },
+    {
+      "city": "New York",
+      "address": ["21 W 35th St", "New York, NY 10001"],
+      "hours": {
+        "Mon-Thu": "5pm–11pm",
+        "Fri": "5pm–12am",
+        "Sat": "4pm–12am",
+        "Sun": "4pm–11pm"
+      }
+    }
+  ],
+  "menu_highlights": [
+    "A5 Wagyu steak",
+    "Premium oysters",
+    "Sushi and sashimi"
+  ]
+}
