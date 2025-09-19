@@ -40,33 +40,42 @@ const KB_TEXT = kbToText(KB)
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-app.get('/health', (req, res) => res.json({ ok: true })) // simple health check
-
 app.post('/api/chat', async (req, res) => {
     try {
-        const { messages = [] } = req.body || {}
+        const { messages = [], mode = "versatile" } = req.body || {}
 
-        const system = [
-            'You are a concise restaurant assistant.',
-            'Answer ONLY from the reference data below.',
-            'If a question is not covered, say you do not have that information and ask a short follow up.',
-            'Collect booking details when asked to reserve: name, email, party size, date, time, phone number, allergy, special requests.',
-            '',
-            'REFERENCE DATA:',
-            KB_TEXT
-        ].join('\n')
+        const BASE_RULES_STRICT = [
+            "You are a concise restaurant assistant.",
+            "Answer ONLY from the REFERENCE DATA below.",
+            "If a question is not covered, say you do not have that information and ask a short follow up.",
+            "Collect booking details when asked to reserve: name, email, party size, date, time, special requests.",
+            "", "REFERENCE DATA:",
+        ].join("\n");
+
+        const BASE_RULES_VERSATILE = [
+            "You are a concise, friendly restaurant assistant.",
+            "FIRST: If the user asks about this restaurant (hours, locations, policies, contact, menu highlights), answer from the REFERENCE DATA exactly.",
+            "SECOND: If the user asks a general food/culinary question (e.g., 'what is A5 Wagyu?', 'what is nigiri?'), answer briefly using general knowledge.",
+            "If the reference data conflicts with general knowledge, the REFERENCE DATA takes priority for anything about this restaurant.",
+            "If information is missing or ambiguous, say you don't have that and ask a short follow-up.",
+            "If asked to book, collect: name, email, party size, date, time, special requests.",
+            "Do NOT invent prices, promotions, or unavailable items. If unsure, ask to confirm.",
+            "", "REFERENCE DATA:",
+        ].join("\n");
+
+        const system = (mode === "strict" ? BASE_RULES_STRICT : BASE_RULES_VERSATILE) + "\n" + KB_TEXT;
 
         const completion = await client.chat.completions.create({
             model: 'gpt-4o',
             temperature: 0.2,
             messages: [{ role: 'system', content: system }, ...messages],
             max_tokens: 400
-        })
+        });
 
-        res.json({ reply: completion.choices[0].message.content })
+        res.json({ reply: completion.choices[0].message.content });
     } catch (err) {
-        console.error(err)
-        res.status(500).json({ error: 'Chat backend error' })
+        console.error(err);
+        res.status(500).json({ error: 'Chat backend error' });
     }
 })
 
