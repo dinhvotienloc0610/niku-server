@@ -68,7 +68,7 @@ app.post('/api/chat', async (req, res) => {
             "If the reference data conflicts with general knowledge, the REFERENCE DATA takes priority for anything about this restaurant.",
             "If information is missing or ambiguous, say you don't have that and ask a short follow-up.",
             // Reservations & safety
-            "If asked to book, collect: name, email, party size, date, time, special requests.",
+            "If asked to book, collect: name, email, phone number, party size, date, time, special requests, allergy.",
             "Do NOT invent prices, promotions, or unavailable items. If unsure, ask to confirm.",
             "",
             "REFERENCE DATA:",
